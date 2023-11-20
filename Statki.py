@@ -26,7 +26,7 @@ choice = "main_menu"
 while run:
     screen.fill((200, 232, 232))
     if choice == "main_menu":
-        pygame.display.set_caption("Statki: Bitwa trwa")        
+        pygame.display.set_caption("Statki: Bitwa trwa")
         menu.use_draw()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -40,13 +40,14 @@ while run:
                         button_height = 100
                         button_spacing = 40
                         button_x = (SCREEN_WIDTH - button_width) // 2
-                        button_y = (SCREEN_HEIGHT - ((button_height + button_spacing) * len(menu.menu_buttons))) // 2 + (
-                                i * (button_height + button_spacing))
+                        button_y = (SCREEN_HEIGHT - (
+                                    (button_height + button_spacing) * len(menu.menu_buttons))) // 2 + (
+                                           i * (button_height + button_spacing))
 
                         if button_x < event.pos[0] < button_x + button_width and \
                                 button_y < event.pos[1] < button_y + button_height:
                             if button["function"] == "start_game":
-                                choice = "game_screen"
+                                choice = "setShips"
                             elif button["function"] == "options":
                                 choice = "custom"
                             elif button["function"] == "scoreboard":
@@ -54,22 +55,32 @@ while run:
                             elif button["function"] == "quit_game":
                                 menu.quit_game()
         pygame.display.flip()
-    if choice == "game_screen" :
+    if choice == "setShips":
         SetShips.use_draw()
+        SetShips.check_confirm_button_click()
+        if SetShips.confirm_button_clicked == True:
+            choice="game_screen"
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 choice = "settings"
-    if choice == "settings" :
+    if choice == "game_screen":
+        game.use_draw()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                choice = "settings"
+    if choice == "settings":
         settings.use_draw()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 run = False
-    if choice == "custom" :
-        custom.use_draw() 
+    if choice == "custom":
+        custom.use_draw()
         while run:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -103,11 +114,14 @@ while run:
             # Rysuj przyciski i tekst na ekranie
             pygame.draw.rect(custom.screen, custom.exit_button_color if not custom.exit_button_rect.collidepoint(
                 pygame.mouse.get_pos()) else custom.exit_button_hover_color, custom.exit_button_rect)
-            pygame.draw.rect(custom.screen, custom.settings_button_color if not custom.settings_button_rect.collidepoint(
-                pygame.mouse.get_pos()) else custom.settings_button_hover_color, custom.settings_button_rect)
+            pygame.draw.rect(custom.screen,
+                             custom.settings_button_color if not custom.settings_button_rect.collidepoint(
+                                 pygame.mouse.get_pos()) else custom.settings_button_hover_color,
+                             custom.settings_button_rect)
 
             # Tekst na przyciskach
-            custom.screen.blit(custom.settings_button_text, (custom.settings_button_x + 10, custom.settings_button_y + 10))
+            custom.screen.blit(custom.settings_button_text,
+                               (custom.settings_button_x + 10, custom.settings_button_y + 10))
             custom.screen.blit(custom.exit_button_text, (custom.exit_button_x + 10, custom.exit_button_y + 10))
     if choice == "scoreboard":
         scoreboard.use_draw()
@@ -118,6 +132,5 @@ while run:
                 if scoreboard.exit_button_rect.collidepoint(pygame.mouse.get_pos()):
                     pygame.quit()
     pygame.display.flip()
-    
 
 pygame.quit()
