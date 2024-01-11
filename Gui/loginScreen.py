@@ -14,7 +14,7 @@ class loginScreen():
 
         # do tytułu
         self.font = pygame.font.SysFont("arial", 50, bold=True)
-        self.title_text = "Logowanie"
+        self.title_text = "Wybór profilu"
         self.title_text_width = self.font.size(self.title_text)[0]
         self.title_text_x = (self.SCREEN_WIDTH - self.title_text_width) // 2
         self.menu_lettering = (19, 38, 87)
@@ -37,8 +37,8 @@ class loginScreen():
 
         self.menu_buttons = [
         {"text": "Graj jako gość", "function": "main_menu"},
-        {"text": "Zaloguj", "function": "loginPage"},
-        {"text": "Rejestracja", "function": "registerPage"},
+        {"text": "Wejdź na profil", "function": "loginPage"},
+        {"text": "Utwórz profil", "function": "registerPage"},
         ]
 
         self.button_font = "Comics Sans"

@@ -4,7 +4,7 @@ import sqlite3
 
 
 pygame.init()
-pygame.display.set_caption('Tablica Wyników')
+pygame.display.set_caption('Tworzenie profilu')
 
 SCREEN_WIDTH = 1920
 SCREEN_HEIGHT = 1080
@@ -34,7 +34,7 @@ class registerPage:
         self.base_font = pygame.font.Font(None, 40)
 
         # Title
-        self.title_text = "Zarejestruj się:"
+        self.title_text = "Utwórz nowy profil:"
         self.title_text_width = self.font_title.size(self.title_text)[0]
         self.title_text_x = (SCREEN_WIDTH - self.title_text_width) // 2
 
@@ -52,11 +52,16 @@ class registerPage:
 
 
         # register button
-        self.register_button_color = (200, 0, 200)
-        self.register_button_hover_color = (150, 0, 150)
+        self.register_button_color = (38, 38, 37)
+        self.register_button_hover_color = (100, 50, 50)
         self.register_button = pu.button(self.register_button_color, (SCREEN_WIDTH - 600+300) // 2,
-                                         (SCREEN_HEIGHT - 800) // 2 + 470, 300, 50, "Zarejestruj", (0, 0, 0),
-                                         "monospace", 30)
+                                         (SCREEN_HEIGHT - 800) // 2 + 500, 300, 50, "Utwórz profil", (255,255,255),
+                                         "monospace", 30,bold=True)
+
+        self.register_back = pu.button((0,0,0),(SCREEN_WIDTH - 600+300) // 2-5,
+                                         (SCREEN_HEIGHT - 800) // 2 + 500-5, 310, 60,"",(0, 0, 0),"monospace", 30)
+
+
 
         self.base_font = pygame.font.Font(None, 40)
         self.user_text = ''
@@ -76,7 +81,7 @@ class registerPage:
                                                 600, 800)
 
         self.input_rect_login = pygame.Rect(self.input_container_rect.x + (600 - 300) // 2,
-                                            self.input_container_rect.y + (800 - 40) // 2 - 280,
+                                            self.input_container_rect.y + (800 - 40) // 2 - 270,
                                             300, 40)
         self.input_rect_password = pygame.Rect(self.input_container_rect.x + (600 - 300) // 2,
                                                self.input_container_rect.y + (800 - 40) // 2 - 146,
@@ -85,8 +90,18 @@ class registerPage:
                                                self.input_container_rect.y + (800 - 40) // 2 - 12,
                                                300, 40)
 
-        self.color_active = (127, 127, 127)
-        self.color_passive = (0, 0, 0)
+        self.input_rect_login_back = pygame.Rect(self.input_container_rect.x + (600 - 300) // 2 - 5,
+                                                 self.input_container_rect.y + (800 - 40) // 2 - 270 - 5,
+                                                 310, 50)
+        self.input_rect_password_back = pygame.Rect(self.input_container_rect.x + (600 - 300) // 2 - 5,
+                                                    self.input_container_rect.y + (800 - 40) // 2 - 146 - 5,
+                                                    310, 50)
+        self.input_rect_password_repeat_back = pygame.Rect(self.input_container_rect.x + (600 - 300) // 2 - 5,
+                                                           self.input_container_rect.y + (800 - 40) // 2 - 12 - 5,
+                                                           310, 50)
+
+        self.color_active = (250, 250, 250)
+        self.color_passive = (160, 160, 160)
         self.color_login = self.color_passive
         self.color_password = self.color_passive
         self.color_password_repeat = self.color_passive
@@ -107,28 +122,33 @@ class registerPage:
         else:
             self.color_password_repeat = self.color_passive
 
+
         pygame.draw.rect(self.screen, (0, 0, 0), self.input_container_rect_back, 0)
-        pygame.draw.rect(self.screen, (107, 232, 232), self.input_container_rect, 0)
+        pygame.draw.rect(self.screen, (186, 232, 218), self.input_container_rect, 0)
+        pygame.draw.rect(self.screen, (0, 0, 0), self.input_rect_login_back, 0)
+        pygame.draw.rect(self.screen, (0, 0, 0), self.input_rect_password_repeat_back, 0)
+        pygame.draw.rect(self.screen, (0, 0, 0), self.input_rect_password_back, 0)
         pygame.draw.rect(self.screen, self.color_login, self.input_rect_login, 0)
         pygame.draw.rect(self.screen, self.color_password, self.input_rect_password, 0)
         pygame.draw.rect(self.screen, self.color_password_repeat, self.input_rect_password_repeat, 0)
 
-        label_surface = self.font_label.render("Login:", True, (0, 0, 0))
-        self.screen.blit(label_surface, (self.input_rect_login.x, self.input_rect_login.y - 32))
-        label_surface2 = self.font_label.render("Hasło:", True, (0, 0, 0))
-        self.screen.blit(label_surface2, (self.input_rect_login.x, self.input_rect_login.y + 96))
-        label_surface3 = self.font_label.render("Powtórz hasło:", True, (0, 0, 0))
-        self.screen.blit(label_surface3, (self.input_rect_login.x, self.input_rect_login.y + 224))
 
-        text_surface = self.base_font.render(self.user_text, True, (255, 255, 255))
+        label_surface = self.font_label.render("Login:", True, (0, 0, 0))
+        self.screen.blit(label_surface, (self.input_rect_login.x, self.input_rect_login.y - 50))
+        label_surface2 = self.font_label.render("Hasło:", True, (0, 0, 0))
+        self.screen.blit(label_surface2, (self.input_rect_login.x, self.input_rect_login.y + 78))
+        label_surface3 = self.font_label.render("Powtórz hasło:", True, (0, 0, 0))
+        self.screen.blit(label_surface3, (self.input_rect_login.x, self.input_rect_login.y + 206))
+
+        text_surface = self.base_font.render(self.user_text, True, (0,0,0))
         self.screen.blit(text_surface, (self.input_rect_login.x + 5, self.input_rect_login.y + 5))
 
         masked_password = '*' * len(self.password_text)
-        text_surface2 = self.base_font.render(masked_password, True, (255, 255, 255))
+        text_surface2 = self.base_font.render(masked_password, True, (0,0,0))
         self.screen.blit(text_surface2, (self.input_rect_password.x + 5, self.input_rect_password.y + 5))
 
         masked_password = '*' * len(self.password_repeat_text)
-        text_surface2 = self.base_font.render(masked_password, True, (255, 255, 255))
+        text_surface2 = self.base_font.render(masked_password, True, (0,0,0))
         self.screen.blit(text_surface2, (self.input_rect_password_repeat.x + 5, self.input_rect_password_repeat.y + 5))
 
     def draw_text(self, text, font, text_color, x, y):
@@ -207,6 +227,14 @@ class registerPage:
 
         mouse_pos = pygame.mouse.get_pos()
         is_button_pressed = pygame.mouse.get_pressed()[0]
+
+        if self.register_button.but_rect.collidepoint(mouse_pos):
+            self.register_back.draw(self.screen)
+
+            self.register_button_color=self.register_button_hover_color
+            self.register_button.draw(self.screen)
+        else:
+            self.register_button_color=(38, 38, 37)
 
         if self.register_button.but_rect.collidepoint(mouse_pos) and is_button_pressed and not self.prev_button_state:
 
