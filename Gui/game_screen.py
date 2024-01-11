@@ -32,11 +32,7 @@ class game_screen():
 
         # to test board are now generated
         # self.game_board_1 = self.generate_ship_board()
-        # Tablice do późniejszego przechowywania statków
-        self.but_ships = []
-        self.but_ships_ai = []
         self.game_board_2 = self.generate_ship_manager()
-        
         # --------------------------------------------------------------------------
 
         self.turn = "player"
@@ -368,16 +364,12 @@ class game_screen():
         b = (None, None)
         i = 0
         while b[0] is None:
-            self.but_ships_ai.clear()
             i += 1
             print(i, ". attempt to create a board", sep="")
 
             b = self.generate_ship_board(MAX_ERRORS)
 
         print(i+1, ". board created successfully", sep="")
-
-
-
         return b[0]
 
     def generate_ship_board(self, MAX_ERRORS):
@@ -385,7 +377,6 @@ class game_screen():
         ships_to_place = self.tab_number_of_ship.copy()
         i = 0
         errors = 0
-        n_ship = 0
         while True:
             errors = 0
             if all(S == 0 for S in ships_to_place):
@@ -405,7 +396,6 @@ class game_screen():
             possible_to_place = False
             while not possible_to_place:
                 if errors >= MAX_ERRORS:
-                    self.but_ships_ai.clear()
                     return None, errors
                 errors += 1
 
@@ -460,13 +450,6 @@ class game_screen():
                     for j in range(ship_len):
                         board[r + j][c] = "S"
                 ships_to_place[i]-=1
-                
-                
-                if rotation == 'h':
-                    self.but_ships_ai.append(pu.Statek(ship_len,[c,r],"h"))
-                else:
-                    self.but_ships_ai.append(pu.Statek(ship_len,[c,r],"v"))
-
                 if ships_to_place[i] == 0:
                     i+=1
         for r in range(self.game_board_rows):
@@ -485,7 +468,8 @@ class game_screen():
         self.turn = "pause"
         def delayed_move():
             r, c = None, None
-            while r is None or c is None or self.game_board_1[r][c] == "." or self.game_board_1[r][c] == "X":
+            possible_shoot = False
+            while not possible_shoot:
                 r = random.randint(0, self.game_board_rows - 1)
                 c = random.randint(0, self.game_board_cols - 1)
 
@@ -497,35 +481,6 @@ class game_screen():
             elif self.game_board_1[r][c] == " ":
                 self.game_board_1[r][c] = "."
             self.turn = "player"
-            for ship in self.but_ships:
-                for part in ship.getlocation():
-                    if part == (r,c):
-                        ship.shot(part)
-                if ship.hadItDrown():
-                    x,y = ship.getlocation()[0]
-                    if ship.direction == "v":
-                        if 0 <= y + ship.width < self.game_board_cols:
-                            self.game_board_1[x][y + ship.width] = "."
-                        if 0 <= y - 1 < self.game_board_cols:
-                            self.game_board_1[x][y - 1] = "."
-                        for j in range(-1, ship.width + 1):
-                            if 0 <= y + j < self.game_board_cols:
-                                if x + 1 < self.game_board_rows:
-                                    self.game_board_1[x + 1][y + j] = "."
-                                if x - 1 >= 0:
-                                    self.game_board_1[x - 1][y + j] = "."
-                    elif ship.direction == "h":
-                        if 0 <= x + ship.width < self.game_board_cols:
-                            self.game_board_1[x + ship.width][y] = "."
-                        if 0 <= x - 1 < self.game_board_cols:
-                            self.game_board_1[x - 1][y] = "."
-                        for j in range(-1, ship.width + 1):
-                            if 0 <= x + j < self.game_board_cols:
-                                if y + 1 < self.game_board_rows:
-                                    self.game_board_1[x + j][y + 1] = "."
-                                if y - 1 >= 0:
-                                    self.game_board_1[x + j][y - 1] = "."
-
         thread = threading.Timer(1.0, delayed_move)
         thread.start()
 
@@ -549,51 +504,6 @@ class game_screen():
             self.game_board_2[row_index][col_index] = "X"
         elif self.game_board_2[row_index][col_index] != "X":
             self.game_board_2[row_index][col_index] = "."
-
-        #wizualizacja tablicy na podstawie statków
-        # board_tmp = [["_" for _ in range(self.game_board_cols)] for _ in range(self.game_board_rows)]
-
-        # for ship in self.but_ships_ai:
-        #     for part in ship.getlocation():
-        #         x,y = part
-        #         print("x:",x, end=" ")
-        #         print("y:",y)
-        #         board_tmp[x][y] = "S"
-        #     print("----------------------")
-        # for row in board_tmp:
-        #     for cell in row:
-        #         print(cell, end=" ")
-        #     print()
-
-        for ship in self.but_ships_ai:
-            for part in ship.getlocation():
-                if part == (col_index,row_index):
-                    ship.shot(part)
-            if ship.hadItDrown():
-                c,r = ship.getlocation()[0]
-                if ship.direction == "h":
-                    if 0 <= c + ship.width < self.game_board_cols:
-                        self.game_board_2[r][c + ship.width] = "."
-                    if 0 <= c - 1 < self.game_board_cols:
-                        self.game_board_2[r][c - 1] = "."
-                    for j in range(-1, ship.width + 1):
-                        if 0 <= c + j < self.game_board_cols:
-                            if r + 1 < self.game_board_rows:
-                                self.game_board_2[r + 1][c + j] = "."
-                            if r - 1 >= 0:
-                                self.game_board_2[r - 1][c + j] = "."
-                elif ship.direction == "v":
-                    if 0 <= r + ship.width < self.game_board_cols:
-                        self.game_board_2[r + ship.width][c] = "."
-                    if 0 <= r - 1 < self.game_board_cols:
-                        self.game_board_2[r - 1][c] = "."
-                    for j in range(-1, ship.width + 1):
-                        if 0 <= r + j < self.game_board_cols:
-                            if c + 1 < self.game_board_rows:
-                                self.game_board_2[r + j][c + 1] = "."
-                            if c - 1 >= 0:
-                                self.game_board_2[r + j][c - 1] = "."
-
 
         self.turn="cpu"
 
@@ -662,4 +572,3 @@ class game_screen():
         self.board_rect_AI = [[pygame.Rect(0, 0, 0, 0) for _ in range(self.game_board_cols)] for _ in
                            range(self.game_board_rows)]
         self.board_rect_AI = self.prepare_board(self.start_x+self.space_between_boards+self.board_width, self.start_y)
-

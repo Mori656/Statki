@@ -4,7 +4,7 @@ import sqlite3
 import Gui.main_menu
 
 pygame.init()
-pygame.display.set_caption('Tablica Wyników')
+pygame.display.set_caption('Wybór profilu')
 
 SCREEN_WIDTH = 1920
 SCREEN_HEIGHT = 1080
@@ -33,7 +33,7 @@ class loginPage:
         self.base_font = pygame.font.Font(None, 40)
 
         # Title
-        self.title_text = "Zaloguj się:"
+        self.title_text = "Wejdź na profil:"
         self.title_text_width = self.font_title.size(self.title_text)[0]
         self.title_text_x = (SCREEN_WIDTH - self.title_text_width) // 2
 
@@ -50,10 +50,10 @@ class loginPage:
                                      "monospace", 30)
 
         # login button
-        self.login_button_color = (0, 200, 0)
-        self.login_button_hover_color = (0, 150, 0)
+        self.login_button_color = (37,38,37)
+        self.login_button_hover_color = (100, 50, 50)
         self.login_button = pu.button(self.login_button_color, (SCREEN_WIDTH - 600+300) // 2,
-                                      (SCREEN_HEIGHT - 800) // 2 + 400, 300, 50, "Zaloguj", (0, 0, 0), "monospace", 30)
+                                      (SCREEN_HEIGHT - 800) // 2 + 400, 300, 50, "Wejdź do gry", (255,255,255), "monospace", 30,bold=True)
 
 
 
@@ -74,14 +74,24 @@ class loginPage:
                                                 600, 800)
 
         self.input_rect_login = pygame.Rect(self.input_container_rect.x + (600 - 300) // 2,
-                                            self.input_container_rect.y + (800 - 40) // 2 - 280,
+                                            self.input_container_rect.y + (800 - 40) // 2 - 270,
                                             300, 40)
         self.input_rect_password = pygame.Rect(self.input_container_rect.x + (600 - 300) // 2,
                                                self.input_container_rect.y + (800 - 40) // 2 - 146,
                                                300, 40)
 
-        self.color_active = (127, 127, 127)
-        self.color_passive = (0, 0, 0)
+        self.input_rect_login_back = pygame.Rect(self.input_container_rect.x + (600 - 300) // 2 - 5,
+                                                 self.input_container_rect.y + (800 - 40) // 2 - 270 - 5,
+                                                 310, 50)
+        self.input_rect_password_back = pygame.Rect(self.input_container_rect.x + (600 - 300) // 2 - 5,
+                                                    self.input_container_rect.y + (800 - 40) // 2 - 146 - 5,
+                                                    310, 50)
+
+        self.button_back = pygame.Rect((SCREEN_WIDTH - 600+300) // 2-5,
+                                      (SCREEN_HEIGHT - 800) // 2 + 400-5,310,60)
+
+        self.color_active = (250, 250, 250)
+        self.color_passive = (160, 160, 160)
         self.color_login = self.color_passive
         self.color_password = self.color_passive
 
@@ -97,20 +107,23 @@ class loginPage:
             self.color_password = self.color_passive
 
         pygame.draw.rect(self.screen, (0, 0, 0), self.input_container_rect_back, 0)
-        pygame.draw.rect(self.screen, (107, 232, 232), self.input_container_rect, 0)
+        pygame.draw.rect(self.screen, (186, 232, 218), self.input_container_rect, 0)
+        pygame.draw.rect(self.screen, (0, 0, 0), self.input_rect_login_back, 0)
+        pygame.draw.rect(self.screen, (0, 0, 0), self.input_rect_password_back, 0)
+
         pygame.draw.rect(self.screen, self.color_login, self.input_rect_login, 0)
         pygame.draw.rect(self.screen, self.color_password, self.input_rect_password, 0)
 
         label_surface = self.font_label.render("Login:", True, (0, 0, 0))
-        self.screen.blit(label_surface, (self.input_rect_login.x, self.input_rect_login.y - 32))
+        self.screen.blit(label_surface, (self.input_rect_login.x, self.input_rect_login.y - 50))
         label_surface2 = self.font_label.render("Hasło:", True, (0, 0, 0))
-        self.screen.blit(label_surface2, (self.input_rect_login.x, self.input_rect_login.y + 96))
+        self.screen.blit(label_surface2, (self.input_rect_login.x, self.input_rect_login.y + 78))
 
-        text_surface = self.base_font.render(self.user_text, True, (255, 255, 255))
+        text_surface = self.base_font.render(self.user_text, True, (0, 0, 0))
         self.screen.blit(text_surface, (self.input_rect_login.x + 5, self.input_rect_login.y + 5))
 
         masked_password = '*' * len(self.password_text)
-        text_surface2 = self.base_font.render(masked_password, True, (255, 255, 255))
+        text_surface2 = self.base_font.render(masked_password, True, (0, 0, 0))
         self.screen.blit(text_surface2, (self.input_rect_password.x + 5, self.input_rect_password.y + 5))
 
     def draw_text(self, text, font, text_color, x, y):
@@ -185,13 +198,21 @@ class loginPage:
         mouse_pos = pygame.mouse.get_pos()
         is_button_pressed = pygame.mouse.get_pressed()[0]
 
+        if self.login_button.isOver(mouse_pos):
+            pygame.draw.rect(self.screen, (0, 0, 0), self.button_back, 0)
+            self.login_button_color = self.login_button_hover_color
+
+            self.login_button.draw(self.screen)
+        else:
+            self.login_button_color = (37,38,37)
+
         if self.login_button.but_rect.collidepoint(mouse_pos) and is_button_pressed and not self.prev_button_state:
             print("sukces")
-            #self.login_user()  # Wywołuje funkcję logowania użytkownika
+            # self.login_user()  # Wywołuje funkcję logowania użytkownika
         else:
             self.login_button.color = self.login_button_color
 
-        self.prev_button_state = is_button_pressed  # Aktualizuje poprzedni stan przycisku
+
     def login_user(self):
         # Sprawdź, czy użytkownik o podanym loginie i haśle istnieje w bazie danych
         dbcursor.execute("SELECT * FROM player WHERE login=? AND password=?", (self.user_text, self.password_text))

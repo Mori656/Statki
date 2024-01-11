@@ -121,14 +121,15 @@ class page_custom():
 
         # Checkbox tab
         checkbox_configuration = {
-            '9x9': {4: 4, 3: 3, 2: 2, 1: 1},
-            '10x10': {4: 5, 3: 4, 2: 3, 1: 2},
-            '11x11': {4: 6, 3: 5, 2: 4, 1: 3},
-            '12x12': {4: 7, 3: 6, 2: 5, 1: 4}
+            '9x9': {4: 3, 3: 2, 2: 2, 1: 1},
+            '10x10': {4: 4, 3: 3, 2: 2, 1: 1},
+            '11x11': {4: 6, 3: 4, 2: 3, 1: 2},
+            '12x12': {4: 6, 3: 5, 2: 4, 1: 3}
         }
+        selected_board = None
 
         for j in range(4):
-            for i in range(9):
+            for i in range(6):
                 if not any(bs.isChecked() for bs in self.BoardSize):
                     self.Ships[j][i].draw(self.screen)
                 else:
@@ -156,7 +157,7 @@ class page_custom():
             self.screen.blit(text, (135 + (i * 100), 770))
 
         for j in range(4):
-            for i in range(9):
+            for i in range(checkbox_configuration[selected_board].get(4 - j, 0) if selected_board else 6):
                 text = self.fonth2.render(str(i + 1), False, (0,0,0))
                 self.screen.blit(text, (135 + (i * 100), 410 + (j * 150)))
 
