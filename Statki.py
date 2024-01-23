@@ -364,6 +364,7 @@ while run:
                             if p.isChecked():
                                 p.convert(custom.screen)
                         b.convert(custom.screen)
+                        custom.set_default_number_of_ships()
                         checkclick.play()
                         pygame.display.flip()
                 for s in custom.Ships:
