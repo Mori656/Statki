@@ -66,6 +66,14 @@ class page_custom():
             for i in range(0,9):
                 self.Ships[j].append((pu.checkbox((0,0,0), 130+(i*100), 380+(j*150), 30, 30)))
 
+        # Set default board size
+        self.BoardSize[1].convert(self.screen)
+        
+        # Set default value for ships
+        for j in range(0,4):
+            self.Ships[j][0].convert(self.screen)
+
+        
 
     def Custom_page_draw(self):
         self.screen.fill(self.background_colour)
@@ -121,14 +129,15 @@ class page_custom():
 
         # Checkbox tab
         checkbox_configuration = {
-            '9x9': {4: 4, 3: 3, 2: 2, 1: 1},
-            '10x10': {4: 5, 3: 4, 2: 3, 1: 2},
-            '11x11': {4: 6, 3: 5, 2: 4, 1: 3},
-            '12x12': {4: 7, 3: 6, 2: 5, 1: 4}
+            '9x9': {4: 3, 3: 2, 2: 2, 1: 1},
+            '10x10': {4: 4, 3: 3, 2: 2, 1: 1},
+            '11x11': {4: 6, 3: 4, 2: 3, 1: 2},
+            '12x12': {4: 6, 3: 5, 2: 4, 1: 3}
         }
+        selected_board = None
 
         for j in range(4):
-            for i in range(9):
+            for i in range(6):
                 if not any(bs.isChecked() for bs in self.BoardSize):
                     self.Ships[j][i].draw(self.screen)
                 else:
@@ -151,12 +160,8 @@ class page_custom():
                         if i < clickable_count:
                             self.Ships[j][i].draw(self.screen)
 
-        for i in range(4):
-            text = self.fonth2.render(str(i + 1), False, (0,0,0))
-            self.screen.blit(text, (135 + (i * 100), 770))
-
         for j in range(4):
-            for i in range(9):
+            for i in range(checkbox_configuration[selected_board].get(4 - j, 0) if selected_board else 6):
                 text = self.fonth2.render(str(i + 1), False, (0,0,0))
                 self.screen.blit(text, (135 + (i * 100), 410 + (j * 150)))
 
@@ -314,6 +319,12 @@ class page_custom():
             file.write(f"{volume_music:.2f}\n")
             file.write(f"{volume_effects:.2f}\n")
 
+    def set_default_number_of_ships(self):
+        for s in self.Ships:
+            for z in s:
+                if z.isChecked():
+                    z.convert(self.screen)
+            s[0].convert(self.screen)
 
     def use_draw(self):
         self.volumeMusic = self.volumeMusicSlider.get_value()
