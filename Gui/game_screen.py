@@ -372,11 +372,11 @@ class game_screen():
         while b[0] is None:
             self.but_ships_ai.clear()
             i += 1
-            print(i, ". attempt to create a board", sep="")
+            #print(i, ". attempt to create a board", sep="")
 
             b = self.generate_ship_board(MAX_ERRORS)
 
-        print(i+1, ". board created successfully", sep="")
+        #print(i+1, ". board created successfully", sep="")
 
 
 

@@ -207,8 +207,8 @@ class loginPage:
             self.login_button_color = (37,38,37)
 
         if self.login_button.but_rect.collidepoint(mouse_pos) and is_button_pressed and not self.prev_button_state:
-            print("sukces")
-            # self.login_user()  # Wywołuje funkcję logowania użytkownika
+            #print("sukces")
+            self.login_user()  # Wywołuje funkcję logowania użytkownika
         else:
             self.login_button.color = self.login_button_color
 
@@ -227,14 +227,14 @@ class loginPage:
         dbcursor.execute("UPDATE score SET wins = wins + 1 WHERE login = ?", (self.user_text,))
         dbcursor.execute("UPDATE score SET winratio = wins - loses WHERE login = ?", (self.user_text,))
         dbconn.commit()
-        print("dodano zwycięstwo")
+        #print("dodano zwycięstwo")
     def editScoreOnLose(self):
         dbcursor.execute("UPDATE score SET loses = loses + 1 WHERE login = ?", (self.user_text,))
         dbcursor.execute("UPDATE score SET winratio = wins - loses WHERE login = ?", (self.user_text,))
         dbconn.commit()
-        print("dodano porażkę")
+        #print("dodano porażkę")
     def checkInput(self):
-        print(f"Aktualny login: {self.user_text}")
+        #print(f"Aktualny login: {self.user_text}")
         self.inputs_checked = True
 
     def clearInputs(self):

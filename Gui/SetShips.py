@@ -459,8 +459,9 @@ class SetShips():
 
         for ship in self.but_ships:
             for part in ship.getlocation():
-                print(part)
-            print("S:",ship.width)
+                #print(part)
+                pass
+            #print("S:",ship.width)
 
 
     def mark_hover_tile(self, x, y):

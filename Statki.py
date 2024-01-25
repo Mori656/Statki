@@ -145,9 +145,9 @@ while run:
                                     if choice == "setShips":
                                         SetShips.set_new_value()
                                         game.set_new_value()
+                                        SetShips.but_ships = []
                                     if choice == "loginScreen":
                                         loginPage.clearInputs()
-                                        print("1")
                                         registerPage.clearInputs()
 
 
@@ -419,6 +419,7 @@ while run:
                     buttonclick.play()
                 if custom.play_button.but_rect.collidepoint(pygame.mouse.get_pos()):
                     SetShips.set_new_value()
+                    SetShips.but_ships = []
                     choice = "setShips"
                     buttonclick.play()
                     game.set_new_value()
