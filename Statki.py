@@ -280,6 +280,7 @@ while run:
                         startButtonclick.play()
                         SetShips.clear_empty_on_board()
                         game.game_board_1 = SetShips.game_board_1
+                        game.but_ships = SetShips.but_ships
                 if SetShips.reset_button.but_rect.collidepoint(pygame.mouse.get_pos()):
                     SetShips.reset_board()
                 for i, ship in enumerate(SetShips.but_show_ship):
