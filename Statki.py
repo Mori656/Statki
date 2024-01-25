@@ -107,6 +107,16 @@ dbcursor.execute('''
         password TEXT NOT NULL
     )
 ''')
+dbcursor.execute('''
+    CREATE TABLE IF NOT EXISTS score (
+        id INTEGER PRIMARY KEY,
+        login TEXT NOT NULL,
+        wins int,
+        loses int,
+        winratio int
+    )
+''')
+
 dbconn.close()
 
 
@@ -135,6 +145,11 @@ while run:
                                     if choice == "setShips":
                                         SetShips.set_new_value()
                                         game.set_new_value()
+                                    if choice == "loginScreen":
+                                        loginPage.clearInputs()
+                                        print("1")
+                                        registerPage.clearInputs()
+
 
 
     if choice == "loginScreen":
@@ -152,6 +167,7 @@ while run:
                             for t in loginScreen.menu_buttons:
                                 if t["text"] == b.text:
                                     choice = t["function"]
+
 
     if choice =="registerPage":
         registerPage.use_draw()
@@ -190,6 +206,7 @@ while run:
                     registerPage.handle_text_input(event)
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                     buttonclick.play()
+                    registerPage.clearInputs()
                     for b in loginScreen.tab_but:
                         if b.but_rect.collidepoint(pygame.mouse.get_pos()):
                             for t in loginScreen.menu_buttons:
@@ -205,13 +222,17 @@ while run:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if loginPage.exit_button.but_rect.collidepoint(pygame.mouse.get_pos()):
                     choice = "quit_game"
+
                 if loginPage.menu_button.but_rect.collidepoint(pygame.mouse.get_pos()):
                     choice = "loginScreen"
                     buttonclick.play()
                 if loginPage.login_button.but_rect.collidepoint(pygame.mouse.get_pos()):
+                    loginPage.checkInput()
                     loginPage.login_user()
                     if loginPage.info_message == "Zalogowano":
                         choice = "main_menu"
+                        #loginPage.clearInputs()  # Do przestawienia
+                        #registerPage.clearInputs() # Do przestawienia
                 if loginPage.input_rect_login.collidepoint(event.pos):
                     loginPage.active_login = not loginPage.active_login
                     loginPage.active_password = False
@@ -259,7 +280,6 @@ while run:
                         startButtonclick.play()
                         SetShips.clear_empty_on_board()
                         game.game_board_1 = SetShips.game_board_1
-                        game.but_ships = SetShips.but_ships
                 if SetShips.reset_button.but_rect.collidepoint(pygame.mouse.get_pos()):
                     SetShips.reset_board()
                 for i, ship in enumerate(SetShips.but_show_ship):
@@ -307,10 +327,20 @@ while run:
                         game.mark_hover_tile(a,b)
 
         game.check_end()
+        if game.is_end and game.changeScr:
+            loginPage.editScoreOnWin()
+            game.changeScr = False
+
+
+
+
         if game.turn == "cpu" and game.is_end is False:
             game.use_draw()
             game.cpu_move()
         game.check_end()
+        if game.is_end and game.changeScr:
+            loginPage.editScoreOnLose()
+            game.changeScr = False
 
     if choice == "settings":
         settings.volumeMusic = volumeMusic
@@ -364,7 +394,6 @@ while run:
                             if p.isChecked():
                                 p.convert(custom.screen)
                         b.convert(custom.screen)
-                        custom.set_default_number_of_ships()
                         checkclick.play()
                         pygame.display.flip()
                 for s in custom.Ships:
@@ -383,11 +412,9 @@ while run:
                     buttonclick.play()
                 if custom.play_button.but_rect.collidepoint(pygame.mouse.get_pos()):
                     SetShips.set_new_value()
-                    game.set_new_value()
                     choice = "setShips"
                     buttonclick.play()
-
-                    buttonclick.play()
+                    game.set_new_value()
             if pygame.mouse.get_pressed()[0] and custom.volumeMusicSlider.conteiner_rect.collidepoint(
                     pygame.mouse.get_pos()):
                 custom.volumeMusicSlider.move_slider(pygame.mouse.get_pos())

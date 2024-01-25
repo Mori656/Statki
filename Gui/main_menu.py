@@ -1,10 +1,15 @@
 import pygame
 import Gui.Pygame_Util as pu
 from pygame import mixer
+import Gui.loginPage as lp
+
+loginPage = lp.loginPage
 
 pygame.init()
+
+
 class main_menu():
-    def __init__(self,s):
+    def __init__(self, s):
         self.SCREEN_WIDTH = s.get_width()
         self.SCREEN_HEIGHT = s.get_height()
         self.screen = s
@@ -15,7 +20,6 @@ class main_menu():
         # Screen settings
 
         # screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-
 
         # Colors
         self.background_color = (200, 232, 232)
@@ -35,9 +39,10 @@ class main_menu():
             {"text": "Rozpocznij Grę", "function": "setShips"},
             {"text": "Opcje", "function": "custom"},
             {"text": "Tablica Wyników", "function": "scoreboard"},
+            {"text": "Wyloguj się", "function": "loginScreen"},
             {"text": "Opuść grę", "function": "quit_game"}
         ]
-        
+
         # Buttons atribute
         self.button_font = "Comics Sans"
         self.button_font_size = 40
@@ -52,12 +57,13 @@ class main_menu():
         self.tab_but = []
         a = 0
         for button in self.menu_buttons:
-            
-            b = pu.button(self.button_color,self.button_x,self.button_y + (a*(self.button_height + self.button_spacing)),self.button_width,self.button_height,button["text"],
+            b = pu.button(self.button_color, self.button_x,
+                          self.button_y + (a * (self.button_height + self.button_spacing)), self.button_width,
+                          self.button_height, button["text"],
                           self.button_text_color, self.button_font, self.button_font_size)
             self.tab_but.append(b)
-            a+=1
-            
+            a += 1
+
         # Function to draw the game interface
 
         # Title
@@ -69,26 +75,36 @@ class main_menu():
     def draw_main_menu(self):
         self.screen.fill(self.background_color)
 
+        # user_text = self.font.render("Grasz jako", True, self.menu_lettering)
+        # user_text_x = self.SCREEN_WIDTH - user_text.get_width() - 20
+        # user_text_y = 20
+        # self.screen.blit(user_text, (user_text_x, user_text_y))
+        # user_login = lp.user_text.user_text
+        # login_text = self.font.render(user_login, True, self.menu_lettering)
+        # login_text_x = 30
+        # login_text_y = 50
+        # self.screen.blit(login_text, (login_text_x, login_text_y))
+
         # Draw title
         self.screen.blit(self.title_text, (self.title_x, self.title_y))
         a = 0
         for b in self.tab_but:
-            
+
             # Check if the mouse is over the button
             if b.but_rect.collidepoint(pygame.mouse.get_pos()):
                 b.color = self.button_color_hover
-                pygame.draw.rect(self.screen,(0, 0, 0), pygame.Rect(self.button_x-5,self.button_y-5+(a*(self.button_spacing+self.button_height)),self.button_width+10, self.button_height+10))
+                pygame.draw.rect(self.screen, (0, 0, 0), pygame.Rect(self.button_x - 5, self.button_y - 5 + (
+                            a * (self.button_spacing + self.button_height)), self.button_width + 10,
+                                                                     self.button_height + 10))
                 b.draw(self.screen)
             else:
                 b.color = self.button_color
                 b.draw(self.screen)
-            a+=1
-
-
+            a += 1
 
     def use_draw(self):
         self.draw_main_menu()
-        
+
         # Main game loop
         # run = True
         # clock = pygame.time.Clock()
@@ -120,9 +136,9 @@ class main_menu():
         #                         elif button["function"] == "quit_game":
         #                             quit_game()
 
-            # draw_main_menu()
-            # pygame.display.update()
-            # clock.tick(30)
+        # draw_main_menu()
+        # pygame.display.update()
+        # clock.tick(30)
 
 
 

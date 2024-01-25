@@ -223,3 +223,22 @@ class loginPage:
         else:
             self.info_message = "Błąd logowania"
 
+    def editScoreOnWin(self):
+        dbcursor.execute("UPDATE score SET wins = wins + 1 WHERE login = ?", (self.user_text,))
+        dbconn.commit()
+        print("dodano zwycięstwo")
+    def editScoreOnLose(self):
+        dbcursor.execute("UPDATE score SET loses = loses + 1 WHERE login = ?", (self.user_text,))
+        dbconn.commit()
+        print("dodano porażkę")
+    def checkInput(self):
+        print(f"Aktualny login: {self.user_text}")
+        self.inputs_checked = True
+
+    def clearInputs(self):
+        self.user_text = ""
+        self.password_text = ""
+        self.info_message = ""
+
+
+

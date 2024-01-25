@@ -12,6 +12,7 @@ pygame.init()
 class game_screen():
     def __init__(self, s):
         self.screen = s
+        self.changeScr = True
         # ----------------------------------------------------------------------------------
         """
             space - empty space
@@ -333,6 +334,7 @@ class game_screen():
         if self.is_end:
             if self.turn == "player":
                 winner_text_string = "Komputer zwyciężył"
+
             else:
                 winner_text_string = "Wygrałeś"
 
@@ -499,10 +501,10 @@ class game_screen():
             self.turn = "player"
             for ship in self.but_ships:
                 for part in ship.getlocation():
-                    if part == (r,c):
+                    if part == (r, c):
                         ship.shot(part)
                 if ship.hadItDrown():
-                    x,y = ship.getlocation()[0]
+                    x, y = ship.getlocation()[0]
                     if ship.direction == "v":
                         if 0 <= y + ship.width < self.game_board_cols:
                             self.game_board_1[x][y + ship.width] = "."
@@ -662,4 +664,5 @@ class game_screen():
         self.board_rect_AI = [[pygame.Rect(0, 0, 0, 0) for _ in range(self.game_board_cols)] for _ in
                            range(self.game_board_rows)]
         self.board_rect_AI = self.prepare_board(self.start_x+self.space_between_boards+self.board_width, self.start_y)
+        self.changeScr = True
 

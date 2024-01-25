@@ -254,12 +254,20 @@ class registerPage:
         elif self.user_text and self.password_text and self.password_text == self.password_repeat_text:
             # Add user to database
             dbcursor.execute("INSERT INTO player (login, password) VALUES (?, ?)", (self.user_text, self.password_text))
+            dbcursor.execute("INSERT INTO score (login, wins, loses, winratio) VALUES (?, ?, ?, ?)",
+                             (self.user_text, 0, 0, 0))
             dbconn.commit()
             self.info_message = "Zarejestrowano użytkownika."
         elif not self.user_text and not self.password_text and not self.password_repeat_text:
             self.info_message = ""  # Pola są puste, więc nie wyświetlamy żadnej wiadomości
         else:
             self.info_message = "Błąd rejestracji."
+
+    def clearInputs(self):
+        self.user_text = ""
+        self.info_message = ""
+        self.password_text = ""
+        self.password_repeat_text = ""
 
 
 
