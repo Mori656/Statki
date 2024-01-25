@@ -12,6 +12,8 @@ pygame.init()
 class game_screen():
     def __init__(self, s):
         self.screen = s
+        self.changeScr = True
+        self.startGameTime = pygame.time.get_ticks()
         # ----------------------------------------------------------------------------------
         """
             space - empty space
@@ -316,12 +318,11 @@ class game_screen():
 
     def draw_timer(self):
         # in ms
-        current_time = pygame.time.get_ticks()
+        current_time = pygame.time.get_ticks() - self.startGameTime
 
-        hours = str(current_time // 3600000).zfill(2)
+        hours = str((current_time // 3600000)).zfill(2)
         minutes = str((current_time // 60000) % 60).zfill(2)
         seconds = str((current_time // 1000) % 60).zfill(2)
-
         timer_text = self.timer_font.render(f"{hours}:{minutes}:{seconds}", 1, self.timer_text_color)
 
         pygame.draw.rect(self.screen, self.timer_color, self.timer_rect)
@@ -333,6 +334,7 @@ class game_screen():
         if self.is_end:
             if self.turn == "player":
                 winner_text_string = "Komputer zwyciężył"
+
             else:
                 winner_text_string = "Wygrałeś"
 
@@ -370,11 +372,11 @@ class game_screen():
         while b[0] is None:
             self.but_ships_ai.clear()
             i += 1
-            print(i, ". attempt to create a board", sep="")
+            #print(i, ". attempt to create a board", sep="")
 
             b = self.generate_ship_board(MAX_ERRORS)
 
-        print(i+1, ". board created successfully", sep="")
+        #print(i+1, ". board created successfully", sep="")
 
 
 
@@ -499,10 +501,10 @@ class game_screen():
             self.turn = "player"
             for ship in self.but_ships:
                 for part in ship.getlocation():
-                    if part == (r,c):
+                    if part == (r, c):
                         ship.shot(part)
                 if ship.hadItDrown():
-                    x,y = ship.getlocation()[0]
+                    x, y = ship.getlocation()[0]
                     if ship.direction == "v":
                         if 0 <= y + ship.width < self.game_board_cols:
                             self.game_board_1[x][y + ship.width] = "."
@@ -532,12 +534,15 @@ class game_screen():
     def check_end(self):
         if not any("S" in s for s in self.game_board_1):
             self.is_end = True
+            return self.is_end
 
         elif not any("S" in s for s in self.game_board_2) and not any("Sh" in s for s in self.game_board_2):
             self.is_end = True
+            return self.is_end
 
         else:
             self.is_end = False
+            return self.is_end
 
     def player_shoot(self, row_index, col_index):
 
@@ -662,4 +667,6 @@ class game_screen():
         self.board_rect_AI = [[pygame.Rect(0, 0, 0, 0) for _ in range(self.game_board_cols)] for _ in
                            range(self.game_board_rows)]
         self.board_rect_AI = self.prepare_board(self.start_x+self.space_between_boards+self.board_width, self.start_y)
+        self.changeScr = True
+
 

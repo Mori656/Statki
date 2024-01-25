@@ -33,7 +33,7 @@ class button():
 
 
 class checkbox():
-    def __init__(self, color , x, y, width, height, backgroundcolor = (255,255,255), checkcolor = (255,0,0), outline=1, check=False, text="", size=60, font=None, textGap = 10):
+    def __init__(self, color , x, y, width, height, backgroundcolor = (255,255,255), checkcolor = (255,0,0), outline=1, check=False, text="", size=60, font=None, textGap = 10, enable = True):
         self.x = x                                       # x pos
         self.y = y                                       # y pos
         self.width = width                               # szerokość
@@ -47,6 +47,7 @@ class checkbox():
         self.font = pygame.font.SysFont(font, size)      # rodzaj czcionki
         self.size = size                                 # rozmair tekstu
         self.textGap = textGap                           # odległość tekstu od obramowania
+        self.isEnable = enable                           # czy mozliwy do kliknięcia
 
         self.check_rect = pygame.Rect(self.x, self.y, self.width, self.height)
     #Draws the checkbox
