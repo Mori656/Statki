@@ -162,8 +162,15 @@ class page_custom():
 
         for j in range(4):
             for i in range(checkbox_configuration[selected_board].get(4 - j, 0) if selected_board else 6):
-                text = self.fonth2.render(str(i + 1), False, (0,0,0))
+                text = self.fonth2.render(str(i + 1), False, (0, 0, 0))
                 self.screen.blit(text, (135 + (i * 100), 410 + (j * 150)))
+                self.Ships[j][i].isEnable = True
+            for i in range(9):
+                t = checkbox_configuration[selected_board].get(4 - j, 0)
+                if (9 - t - i) > 0:
+                    self.Ships[j][9 - i - 1].isEnable = False
+                else:
+                    break
 
         self.draw_exit_button()
         self.draw_menu_button()

@@ -225,10 +225,12 @@ class loginPage:
 
     def editScoreOnWin(self):
         dbcursor.execute("UPDATE score SET wins = wins + 1 WHERE login = ?", (self.user_text,))
+        dbcursor.execute("UPDATE score SET winratio = wins - loses WHERE login = ?", (self.user_text,))
         dbconn.commit()
         print("dodano zwycięstwo")
     def editScoreOnLose(self):
         dbcursor.execute("UPDATE score SET loses = loses + 1 WHERE login = ?", (self.user_text,))
+        dbcursor.execute("UPDATE score SET winratio = wins - loses WHERE login = ?", (self.user_text,))
         dbconn.commit()
         print("dodano porażkę")
     def checkInput(self):

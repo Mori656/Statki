@@ -70,7 +70,7 @@ class scoreboard():
 
         dbconn = sqlite3.connect('player.db')
         dbcursor = dbconn.cursor()
-        dbcursor.execute("SELECT * FROM score")
+        dbcursor.execute("SELECT * FROM score ORDER BY score.winratio DESC LIMIT 8")
         records = dbcursor.fetchall()
         dbcursor.close()
         dbconn.close()

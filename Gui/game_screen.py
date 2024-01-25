@@ -534,12 +534,15 @@ class game_screen():
     def check_end(self):
         if not any("S" in s for s in self.game_board_1):
             self.is_end = True
+            return self.is_end
 
         elif not any("S" in s for s in self.game_board_2) and not any("Sh" in s for s in self.game_board_2):
             self.is_end = True
+            return self.is_end
 
         else:
             self.is_end = False
+            return self.is_end
 
     def player_shoot(self, row_index, col_index):
 
