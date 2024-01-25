@@ -278,6 +278,7 @@ while run:
                 if SetShips.confirm_button.but_rect.collidepoint(pygame.mouse.get_pos()):
                     if SetShips.all_ships_placed:
                         choice = "game_screen"
+                        game.startGameTime = pygame.time.get_ticks()
                         startButtonclick.play()
                         SetShips.clear_empty_on_board()
                         game.game_board_1 = SetShips.game_board_1

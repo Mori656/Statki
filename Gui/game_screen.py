@@ -13,6 +13,7 @@ class game_screen():
     def __init__(self, s):
         self.screen = s
         self.changeScr = True
+        self.startGameTime = pygame.time.get_ticks()
         # ----------------------------------------------------------------------------------
         """
             space - empty space
@@ -317,12 +318,11 @@ class game_screen():
 
     def draw_timer(self):
         # in ms
-        current_time = pygame.time.get_ticks()
+        current_time = pygame.time.get_ticks() - self.startGameTime
 
-        hours = str(current_time // 3600000).zfill(2)
+        hours = str((current_time // 3600000)).zfill(2)
         minutes = str((current_time // 60000) % 60).zfill(2)
         seconds = str((current_time // 1000) % 60).zfill(2)
-
         timer_text = self.timer_font.render(f"{hours}:{minutes}:{seconds}", 1, self.timer_text_color)
 
         pygame.draw.rect(self.screen, self.timer_color, self.timer_rect)
@@ -668,4 +668,5 @@ class game_screen():
                            range(self.game_board_rows)]
         self.board_rect_AI = self.prepare_board(self.start_x+self.space_between_boards+self.board_width, self.start_y)
         self.changeScr = True
+
 
